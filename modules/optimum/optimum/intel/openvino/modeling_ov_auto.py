@@ -40,7 +40,7 @@ if is_tf_available():
         from transformers import TFAutoModelWithLMHead as TFAutoModelForMaskedLM
 
 
-from .modeling_ov_utils import OVPreTrainedModel
+from .modeling_ov_utils_new import OVPreTrainedModel
 
 
 class _BaseOVAutoModelClass(OVPreTrainedModel):
