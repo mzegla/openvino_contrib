@@ -17,6 +17,8 @@ except Exception as error:
 install_requires = [
     "transformers",
     "openvino",
+    "ovmsclient",
+    "openmodelzoo-modelapi @ git+https://github.com/openvinotoolkit/open_model_zoo.git#egg=openmodelzoo-modelapi&subdirectory=demos/common/python",
 ]
 
 nncf_deps = [

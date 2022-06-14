@@ -37,6 +37,9 @@ model = OVAutoModel.from_pretrained(<name_or_path>, from_tf=True)
 
 # Initialize a model from OpenVINO IR
 model = OVAutoModel.from_pretrained(<name_or_path>)
+
+# Initialize with a model hosted in OpenVINO Model Server (requires providing config)
+model = OVAutoModel.from_pretrained(<model_url>, inference_backend="ovms", config=<config>)
 ```
 
 ## NNCF
