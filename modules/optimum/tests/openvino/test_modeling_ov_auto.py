@@ -345,4 +345,4 @@ class OVMBartForConditionalGenerationTest(unittest.TestCase):
 
     def test_from_ir(self):
         model = OVMBartForConditionalGeneration.from_pretrained("dkurt/mbart-large-50-many-to-many-mmt-int8")
-        self.check_model(model, "Le chef de l’ONU affirme qu’aucune solution militaire n’existe dans la Syrie.")
+        self.check_model(model, "Le chef de l'ONU affirme qu'aucune solution militaire n'existe dans la Syrie.")

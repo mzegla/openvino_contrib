@@ -221,7 +221,7 @@ class OVMBartForConditionalGeneration(GenerationMixin):
         net = load_ov_model_from_pytorch(model, inputs)
 
         # Fix for 2022.1 release
-        net.net.inputs[2].get_tensor().set_names(set(["encoder_outputs"]))
+        net.inference_adapter.model.inputs[2].get_tensor().set_names(set(["encoder_outputs"]))
 
         if use_cache:
             inputs["past_key_values"] = [
