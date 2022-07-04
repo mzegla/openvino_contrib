@@ -2,14 +2,7 @@ import docker
 from datetime import datetime
 import time
 
-from optimum.intel.openvino import (
-    OVAutoModel,
-    OVAutoModelForMaskedLM,
-    OVAutoModelForQuestionAnswering,
-    OVAutoModelWithLMHead,
-    OVAutoModelForAudioClassification,
-    OVMBartForConditionalGeneration,
-)
+from optimum.intel.openvino import OVAutoModel
 
 def start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **kwargs):
 

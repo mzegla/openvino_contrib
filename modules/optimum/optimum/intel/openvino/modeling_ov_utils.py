@@ -489,13 +489,14 @@ class OVPreTrainedModel(GenerationMixin):
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
 
+"""
     # Experimental
     def create_ovms_image(self, image_tag):
 
         # Prepare configuration file
         if not self.model_initialized:
             self._load_network()
-        """
+
         shapes = {}
         for name, metadata in self.inference_adapter.get_input_layers().items():
             shapes[name] = str(tuple(metadata.shape))
@@ -511,7 +512,7 @@ class OVPreTrainedModel(GenerationMixin):
         import json
         with open("/tmp/optimum/config.json", "w") as outfile:
             json.dump(config, outfile)
-        """
+
         import shutil
         self.save_pretrained("/tmp/optimum/")
         print("Copied model to temporary location")
@@ -540,5 +541,4 @@ class OVPreTrainedModel(GenerationMixin):
         import docker
         client = docker.from_env()
         return client.containers.run(image_tag, "--port 9000", ports= {"9000/tcp": port}, detach=True)
-        
-
+"""
