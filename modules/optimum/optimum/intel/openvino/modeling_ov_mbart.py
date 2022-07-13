@@ -242,7 +242,7 @@ class OVMBartForConditionalGeneration(GenerationMixin):
 
     def create_mapping_config(self, output_keys_order, mapping_config_path):
         import json
-        outputs_mapping = {output_name: output_index for output_index, output_name in enumerate(output_keys_order)}
+        outputs_mapping = {output_name: str(output_index) for output_index, output_name in enumerate(output_keys_order)}
         mapping_config = {"outputs": outputs_mapping}
         with open(mapping_config_path, "w") as outfile:
             json.dump(mapping_config, outfile)
@@ -279,8 +279,8 @@ class OVMBartForConditionalGeneration(GenerationMixin):
             json.dump(config, outfile)
 
         # Prepare mapping configs for model and model_past (to make outputs ordering possible)
-        model_outputs_key_order = ['output', '617', '630', '3514', '3516', '860', '873', '3518', '3520', '1103', '1116', '3522', '3524', '1346', '1359', '3526', '3528', '1589', '1602', '3530', '3532', '1832', '1845', '3534', '3536', '2075', '2088', '3538', '3540', '2318', '2331', '3542', '3544', '2561', '2574', '3546', '3548', '2804', '2817', '3550', '3552', '3047', '3060', '3554', '3556', '3290', '3303', '3558', '3560']
-        model_past_outputs_key_order = ['output', '680', '681', '3275', '3277', '899', '900', '3279', '3281', '1118', '1119', '3283', '3285', '1337', '1338', '3287', '3289', '1556', '1557', '3291', '3293', '1775', '1776', '3295', '3297', '1994', '1995', '3299', '3301', '2213', '2214', '3303', '3305', '2432', '2433', '3307', '3309', '2651', '2652', '3311', '3313', '2870', '2871', '3315', '3317', '3089', '3090', '3319', '3321']
+        model_outputs_key_order = list(self.model.inference_adapter.get_output_layers().keys())
+        model_past_outputs_key_order = list(self.model_past.inference_adapter.get_output_layers().keys())
         
         self.create_mapping_config(model_outputs_key_order, f"/tmp/optimum/models/{model_names_map[self.model]}/1/mapping_config.json")
         self.create_mapping_config(model_past_outputs_key_order, f"/tmp/optimum/models/{model_names_map[self.model_past]}/1/mapping_config.json")
@@ -290,18 +290,18 @@ class OVMBartForConditionalGeneration(GenerationMixin):
             "FROM openvino/model_server:latest\n",
             "COPY models /opt/models\n",
             "ENTRYPOINT [\"/ovms/bin/ovms\", \"--config_path\", \"/opt/models/config.json\"]\n"
-            ]
+        ]
 
         with open("/tmp/optimum/Dockerfile", "w") as f:
             f.writelines(dockerfile_content)
 
         print("Created Dockerfile")
 
-        #import docker
-        #client = docker.from_env()
-        #client.images.build(path="/tmp/optimum", tag=image_tag)
-        #print(f"Successfully built image: {image_tag}")
-        #shutil.rmtree("/tmp/optimum/")
-        #print("Cleanup successful")
+        import docker
+        client = docker.from_env()
+        client.images.build(path="/tmp/optimum", tag=image_tag)
+        print(f"Successfully built image: {image_tag}")
+        shutil.rmtree("/tmp/optimum/")
+        print("Cleanup successful")
 
 
