@@ -242,7 +242,7 @@ class OVMBartForConditionalGeneration(GenerationMixin):
 
     def create_mapping_config(self, output_keys_order, mapping_config_path):
         import json
-        outputs_mapping = {output_name: str(output_index) for output_index, output_name in enumerate(output_keys_order)}
+        outputs_mapping = {output_name: str(output_index) if output_name is not "output" else output_name for output_index, output_name in enumerate(output_keys_order)}
         mapping_config = {"outputs": outputs_mapping}
         with open(mapping_config_path, "w") as outfile:
             json.dump(mapping_config, outfile)

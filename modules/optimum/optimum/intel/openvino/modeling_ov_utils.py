@@ -8,6 +8,7 @@ import shutil
 import time
 
 import numpy as np
+from torch import Tensor
 
 from transformers.file_utils import cached_path, hf_bucket_url
 from transformers.file_utils import is_torch_available
@@ -425,13 +426,16 @@ class OVPreTrainedModel(GenerationMixin):
         if not self.model_initialized:
             self._load_network()
 
+        # ovmsclient not supporting torch.Tensor input type - needed conversion to numpy
+        inputs = {input_name: data.numpy() if type(data) is torch.Tensor else data for input_name, data in inputs.items()}
+
         outs = self.inference_adapter.infer_sync(inputs)
 
         # OVMSAdapter does not guarantee output keys order
         # For use cases where such order is required we use workaround with output names mapping
         # OV model output names are mapped to numers and below we sort them to restore original order
         if type(self.inference_adapter) is OVMSAdapter:
-            outs = dict(sorted(outs.items()))
+            outs = dict(sorted(outs.items(),  key=lambda item: int(item[0]) if item[0] is not "output" else -1))
 
         logits = outs["output"] if "output" in outs else next(iter(outs.values()))
 
