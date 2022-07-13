@@ -489,21 +489,18 @@ class OVPreTrainedModel(GenerationMixin):
     def __call__(self, *args, **kwargs):
         return self.forward(*args, **kwargs)
 
-"""
+
     # Experimental
+
     def create_ovms_image(self, image_tag):
 
         # Prepare configuration file
         if not self.model_initialized:
             self._load_network()
 
-        shapes = {}
-        for name, metadata in self.inference_adapter.get_input_layers().items():
-            shapes[name] = str(tuple(metadata.shape))
         model_configuration = {
             "name":"model",
             "base_path":"/opt/model",
-            "shape": shapes
          }
 
         config = {}
@@ -520,7 +517,8 @@ class OVPreTrainedModel(GenerationMixin):
         dockerfile_content = [
             "FROM openvino/model_server:latest\n",
             "COPY *.xml *.bin /opt/model/1/\n",
-            "ENTRYPOINT [\"/ovms/bin/ovms\", \"--model_name\", \"model\", \"--model_path\", \"/opt/model\"]\n"
+            "COPY config.json /opt/config.json\n",
+            "ENTRYPOINT [\"/ovms/bin/ovms\", \"--config_path\", \"/opt/config.json\"]\n"
             ]
 
         with open("/tmp/optimum/Dockerfile", "w") as f:
@@ -541,4 +539,4 @@ class OVPreTrainedModel(GenerationMixin):
         import docker
         client = docker.from_env()
         return client.containers.run(image_tag, "--port 9000", ports= {"9000/tcp": port}, detach=True)
-"""
+
