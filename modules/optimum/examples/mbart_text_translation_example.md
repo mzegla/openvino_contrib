@@ -25,7 +25,7 @@ pip install sentencepiece
 
 ```python
 from optimum.intel.openvino import OVMBartForConditionalGeneration
-from transformers import MBart50TokenizerFast, AutoConfig
+from transformers import MBart50TokenizerFast
 
 model = OVMBartForConditionalGeneration.from_pretrained("dkurt/mbart-large-50-many-to-many-mmt-int8")
 tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
