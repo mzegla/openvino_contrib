@@ -435,7 +435,7 @@ class OVPreTrainedModel(GenerationMixin):
         # For use cases where such order is required we use workaround with output names mapping
         # OV model output names are mapped to numers and below we sort them to restore original order
         if type(self.inference_adapter) is OVMSAdapter:
-            outs = dict(sorted(outs.items(),  key=lambda item: int(item[0]) if item[0] is not "output" else -1))
+            outs = dict(sorted(outs.items(),  key=lambda item: int(item[0]) if item[0] != "output" else -1))
 
         logits = outs["output"] if "output" in outs else next(iter(outs.values()))
 
