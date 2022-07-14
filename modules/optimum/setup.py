@@ -18,14 +18,10 @@ install_requires = [
     "transformers",
     "openvino",
     "ovmsclient",
-    "openmodelzoo-modelapi @ git+https://github.com/mzegla/open_model_zoo.git@adapters_changes#egg=openmodelzoo-modelapi&subdirectory=demos/common/python",
+    "openmodelzoo-modelapi @ git+https://github.com/mzegla/open_model_zoo.git@adapters_changes#egg=openmodelzoo-modelapi&subdirectory=demos/common/python",  # noqa
 ]
 
-nncf_deps = [
-    "openvino-dev[onnx]",
-    "nncf",
-    "transformers<4.16.0",
-]
+nncf_deps = ["openvino-dev[onnx]", "nncf", "transformers<4.16.0"]
 
 # Add patches as data
 folder = "optimum/intel/nncf/patches"
@@ -54,9 +50,6 @@ setup(
     license="Apache",
     packages=find_namespace_packages(include=["optimum.*"]),
     install_requires=install_requires,
-    extras_require={
-        "nncf": nncf_deps,
-        "all": nncf_deps,
-    },
+    extras_require={"nncf": nncf_deps, "all": nncf_deps},
     data_files=[("../../optimum/intel/nncf/patches", data)],
 )

@@ -108,14 +108,15 @@ class OVBertForQuestionAnsweringTest(unittest.TestCase):
         try:
             hf_model_name = "dkurt/bert-large-uncased-whole-word-masking-squad-int8-0001"
             ovms_model_name = "bert"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModelForQuestionAnswering)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModelForQuestionAnswering
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             tok = AutoTokenizer.from_pretrained(hf_model_name)
             model = OVAutoModelForQuestionAnswering.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
-            self.check_model(model, tok)  
+            self.check_model(model, tok)
         finally:
             ovms_container.kill()
             shutil.rmtree(tmp_model_dir)
@@ -142,11 +143,12 @@ class GPT2ModelTest(unittest.TestCase):
         try:
             for hf_model_name in ["gpt2"]:
                 ovms_model_name = hf_model_name
-                ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+                ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                    hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+                )
                 config = AutoConfig.from_pretrained(hf_model_name)
                 model = OVAutoModel.from_pretrained(
-                    f"localhost:9000/models/{ovms_model_name}",
-                    inference_backend="ovms", config=config
+                    f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
                 )
                 self.assertIsNotNone(model)
 
@@ -184,11 +186,12 @@ class OVAlbertModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "albert-base-v2"
             ovms_model_name = "albert_base_v2"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModel.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             input_ids = np.array([[0, 345, 232, 328, 740, 140, 1695, 69, 6078, 1588, 2]])
             attention_mask = np.array([[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
@@ -203,7 +206,6 @@ class OVAlbertModelIntegrationTest(unittest.TestCase):
         finally:
             ovms_container.kill()
             shutil.rmtree(tmp_model_dir)
-
 
 
 @require_torch
@@ -244,11 +246,12 @@ class OVOPENAIGPTModelLanguageGenerationTest(unittest.TestCase):
         try:
             hf_model_name = "openai-gpt"
             ovms_model_name = "openai_gpt"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModelWithLMHead, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModelWithLMHead, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModelWithLMHead.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             input_ids = np.array([[481, 4735, 544]], dtype=np.int64)  # the president is
             expected_output_ids = [
@@ -307,11 +310,12 @@ class RobertaModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "roberta-base"
             ovms_model_name = "roberta_base"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModelForMaskedLM, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModelForMaskedLM, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModelForMaskedLM.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
 
             input_ids = np.array([[0, 31414, 232, 328, 740, 1140, 12695, 69, 46078, 1588, 2]])
@@ -350,16 +354,19 @@ class RobertaModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "roberta-base"
             ovms_model_name = "roberta_base"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModel.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             input_ids = np.array([[0, 31414, 232, 328, 740, 1140, 12695, 69, 46078, 1588, 2]])
             output = model(input_ids)[0]
             # compare the actual values for a slice.
-            expected_slice = np.array([[[-0.0231, 0.0782, 0.0074], [-0.1854, 0.0540, -0.0175], [0.0548, 0.0799, 0.1687]]])
+            expected_slice = np.array(
+                [[[-0.0231, 0.0782, 0.0074], [-0.1854, 0.0540, -0.0175], [0.0548, 0.0799, 0.1687]]]
+            )
 
             # roberta = torch.hub.load('pytorch/fairseq', 'roberta.base')
             # roberta.eval()
@@ -404,11 +411,12 @@ class RobertaModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "roberta-base"
             ovms_model_name = "roberta_base"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModel.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             tok = AutoTokenizer.from_pretrained("roberta-base")
 
@@ -463,11 +471,12 @@ class TFRobertaModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "roberta-base"
             ovms_model_name = "roberta_base"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModelForMaskedLM, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModelForMaskedLM, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModelForMaskedLM.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
 
             input_ids = np.array([[0, 31414, 232, 328, 740, 1140, 12695, 69, 46078, 1588, 2]])
@@ -497,16 +506,19 @@ class TFRobertaModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "roberta-base"
             ovms_model_name = "roberta_base"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModel.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             input_ids = np.array([[0, 31414, 232, 328, 740, 1140, 12695, 69, 46078, 1588, 2]])
             output = model(input_ids)[0]
             # compare the actual values for a slice.
-            expected_slice = np.array([[[-0.0231, 0.0782, 0.0074], [-0.1854, 0.0540, -0.0175], [0.0548, 0.0799, 0.1687]]])
+            expected_slice = np.array(
+                [[[-0.0231, 0.0782, 0.0074], [-0.1854, 0.0540, -0.0175], [0.0548, 0.0799, 0.1687]]]
+            )
             self.assertTrue(np.allclose(output[:, :3, :3], expected_slice, atol=1e-4))
         finally:
             ovms_container.kill()
@@ -541,20 +553,24 @@ class OVTFDistilBertModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "distilbert-base-uncased"
             ovms_model_name = "distilbert_base_uncased"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModel.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             input_ids = np.array([[0, 31414, 232, 328, 740, 1140, 12695, 69, 46078, 1588, 2]])
             output = model(input_ids)[0]
             # compare the actual values for a slice.
-            expected_slice = np.array([[[-0.0231, 0.0782, 0.0074], [-0.1854, 0.0540, -0.0175], [0.0548, 0.0799, 0.1687]]])
+            expected_slice = np.array(
+                [[[-0.0231, 0.0782, 0.0074], [-0.1854, 0.0540, -0.0175], [0.0548, 0.0799, 0.1687]]]
+            )
             self.assertTrue(np.allclose(output[:, :3, :3], expected_slice, atol=1e-4))
         finally:
             ovms_container.kill()
             shutil.rmtree(tmp_model_dir)
+
 
 @require_torch
 class OVDistilBertModelIntegrationTest(unittest.TestCase):
@@ -577,23 +593,27 @@ class OVDistilBertModelIntegrationTest(unittest.TestCase):
         try:
             hf_model_name = "distilbert-base-uncased"
             ovms_model_name = "distilbert_base_uncased"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModel, **self.model_kwargs
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModel.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             input_ids = np.array([[0, 345, 232, 328, 740, 140, 1695, 69, 6078, 1588, 2]])
             attention_mask = np.array([[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
             output = model(input_ids, attention_mask=attention_mask)[0]
             expected_shape = (1, 11, 768)
             self.assertEqual(output.shape, expected_shape)
-            expected_slice = np.array([[[-0.1639, 0.3299, 0.1648], [-0.1746, 0.3289, 0.1710], [-0.1884, 0.3357, 0.1810]]])
+            expected_slice = np.array(
+                [[[-0.1639, 0.3299, 0.1648], [-0.1746, 0.3289, 0.1710], [-0.1884, 0.3357, 0.1810]]]
+            )
 
             self.assertTrue(np.allclose(output[:, 1:4, 1:4], expected_slice, atol=1e-4))
         finally:
             ovms_container.kill()
             shutil.rmtree(tmp_model_dir)
+
 
 @unittest.skipIf(version.parse(transformers.__version__) < version.parse("4.12.0"), "Too old version for Audio models")
 class OVAutoModelForAudioClassificationTest(unittest.TestCase):
@@ -616,11 +636,12 @@ class OVAutoModelForAudioClassificationTest(unittest.TestCase):
         try:
             hf_model_name = "dkurt/wav2vec2-base-ft-keyword-spotting-int8"
             ovms_model_name = "wav2vec2"
-            ovms_container, tmp_model_dir = start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModelForAudioClassification)
+            ovms_container, tmp_model_dir = start_ovms_with_single_model(
+                hf_model_name, ovms_model_name, model_class=OVAutoModelForAudioClassification
+            )
             config = AutoConfig.from_pretrained(hf_model_name)
             model = OVAutoModelForAudioClassification.from_pretrained(
-                f"localhost:9000/models/{ovms_model_name}",
-                inference_backend="ovms", config=config
+                f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
             self.check_model(model)
         finally:
