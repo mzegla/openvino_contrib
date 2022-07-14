@@ -61,7 +61,7 @@ model.create_ovms_image("ovms_mbart:latest")
 Then use the newly created image to start a container. Now to make it work you just need to specify the gRPC port that OVMS will listen on and forward it to the container.
 
 ```bash
-docker run --rm -d -p 9000:9000 ovms_mbart:latest --port 9000
+docker run --rm -d -p 9999:9999 ovms_mbart:latest --port 9999
 ```
 
 Now that OpenVINO Model Server is running, let's run below sample to translate the sentence with MBart:
