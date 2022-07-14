@@ -453,7 +453,7 @@ class OVPreTrainedModel(GenerationMixin):
             return ModelOutput(logits=torch.tensor(logits), past_key_values=past_key_values)
 
     def forward(self, *args, **kwargs):
-        if self.main_input_name in ["input_ids", "decoder_input_ids"]:
+        if self.main_input_name in ["input_ids", "input_ids:0", "decoder_input_ids"]:
             inputs = self._prepare_nlp_inputs(*args, **kwargs)
         elif self.main_input_name == "input_values":
             inputs = self._prepare_audio_inputs(*args, **kwargs)
