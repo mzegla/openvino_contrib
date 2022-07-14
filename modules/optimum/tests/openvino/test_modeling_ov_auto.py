@@ -48,7 +48,8 @@ from optimum.intel.openvino import (
     OVMBartForConditionalGeneration,
 )
 
-from conftest import start_ovms_with_single_model
+if os.getenv("TEST_WITH_OVMS"):
+    from conftest import start_ovms_with_single_model
 
 
 class OVBertForQuestionAnsweringTest(unittest.TestCase):

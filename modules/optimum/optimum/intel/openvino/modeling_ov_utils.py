@@ -215,7 +215,7 @@ class OVPreTrainedModel(GenerationMixin):
         self.use_dynamic_shapes = True
 
         self.main_input_name = None
-        for name in ["input_ids", "input_values", "decoder_input_ids"]:
+        for name in ["input_ids", "input_ids:0", "input_values", "decoder_input_ids"]:
             if name in self.input_names:
                 self.main_input_name = name
         if self.main_input_name is None:
