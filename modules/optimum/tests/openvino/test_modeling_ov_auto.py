@@ -688,3 +688,20 @@ class OVMBartForConditionalGenerationTest(unittest.TestCase):
     def test_from_ir(self):
         model = OVMBartForConditionalGeneration.from_pretrained("dkurt/mbart-large-50-many-to-many-mmt-int8")
         self.check_model(model, "Le chef de l'ONU affirme qu'aucune solution militaire n'existe dans la Syrie.")
+
+    @unittest.skipIf("TEST_WITH_OVMS" not in os.environ, "OVMS integration tests turned off")
+    def test_with_ovms(self):
+        from conftest import build_and_run_mbart_ovms_image, remove_docker_image
+
+        try:
+            ovms_container, image_tag = build_and_run_mbart_ovms_image()
+            config = AutoConfig.from_pretrained("dkurt/mbart-large-50-many-to-many-mmt-int8")
+            model = OVMBartForConditionalGeneration.from_pretrained(
+                ["localhost:9000/models/encoder", "localhost:9000/models/model", "localhost:9000/models/model_past"],
+                inference_backend="ovms",
+                config=config,
+            )
+            self.check_model(model)
+        finally:
+            ovms_container.kill()
+            remove_docker_image(image_tag)

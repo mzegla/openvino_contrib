@@ -2,7 +2,7 @@ import docker
 from datetime import datetime
 import time
 
-from optimum.intel.openvino import OVAutoModel
+from optimum.intel.openvino import OVAutoModel, OVMBartForConditionalGeneration
 
 
 def start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVAutoModel, **kwargs):
@@ -31,3 +31,23 @@ def start_ovms_with_single_model(hf_model_name, ovms_model_name, model_class=OVA
             break
         time.sleep(1)
     return ovms_container, tmp_model_dir
+
+
+def build_and_run_mbart_ovms_image(image_tag="ovms_mbart_optimum:latest"):
+    model = OVMBartForConditionalGeneration.from_pretrained("dkurt/mbart-large-50-many-to-many-mmt-int8")
+    model.create_ovms_image(image_tag)
+
+    docker_client = docker.from_env()
+    try:
+        ovms_container = docker_client.containers.run(
+            image=image_tag, command="--port 9000", ports={"9000/tcp": 9000}, detach=True, auto_remove=True
+        )
+    except Exception:
+        docker_client.images.remove(image_tag)
+        raise
+    return ovms_container, image_tag
+
+
+def remove_docker_image(image_tag):
+    docker_client = docker.from_env()
+    docker_client.images.remove(image_tag)
