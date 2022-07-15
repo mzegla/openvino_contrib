@@ -701,7 +701,7 @@ class OVMBartForConditionalGenerationTest(unittest.TestCase):
                 inference_backend="ovms",
                 config=config,
             )
-            self.check_model(model)
+            self.check_model(model, "Le chef de l'ONU affirme qu'aucune solution militaire n'existe dans la Syrie.")
         finally:
             ovms_container.kill()
             remove_docker_image(image_tag)
