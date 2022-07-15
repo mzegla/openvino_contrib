@@ -45,6 +45,14 @@ def build_and_run_mbart_ovms_image(image_tag="ovms_mbart_optimum:latest"):
     except Exception:
         docker_client.images.remove(image_tag)
         raise
+
+    max_retries = 10
+    retry_counter = 0
+    while retry_counter < max_retries:
+        if "Server started on port" in ovms_container.logs().decode():
+            break
+        time.sleep(5)
+
     return ovms_container, image_tag
 
 
