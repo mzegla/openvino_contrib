@@ -416,17 +416,17 @@ class OVPreTrainedModel(GenerationMixin):
         }
 
         outs = self.inference_adapter.infer_sync(inputs)
-
-        # OVMSAdapter does not guarantee output keys order
-        # For use cases where such order is required we use workaround with output names mapping
-        # OV model output names are mapped to numers and below we sort them to restore original order
-        if type(self.inference_adapter) is OVMSAdapter:
-            outs = dict(sorted(outs.items(), key=lambda item: int(item[0]) if item[0] != "output" else -1))
-
         logits = outs["output"] if "output" in outs else next(iter(outs.values()))
 
         past_key_values = None
         if self.config.architectures[0].endswith("ForConditionalGeneration") and self.config.use_cache:
+
+            # OVMSAdapter does not guarantee output keys order
+            # For use cases where such order is required we use workaround with output names mapping
+            # OV model output names are mapped to numers and below we sort them to restore original order
+            if type(self.inference_adapter) is OVMSAdapter:
+                outs = dict(sorted(outs.items(), key=lambda item: int(item[0]) if item[0] != "output" else -1))
+
             past_key_values = [[]]
             for name in outs:
                 if name == "output":
