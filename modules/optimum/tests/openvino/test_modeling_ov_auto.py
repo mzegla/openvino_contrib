@@ -117,7 +117,7 @@ class OVBertForQuestionAnsweringTest(unittest.TestCase):
             model = OVAutoModelForQuestionAnswering.from_pretrained(
                 f"localhost:9000/models/{ovms_model_name}", inference_backend="ovms", config=config
             )
-            self.check_model(model, tok)
+            self.check_model(model, tok, "the garden")
         finally:
             ovms_container.kill()
             shutil.rmtree(tmp_model_dir)
