@@ -65,12 +65,7 @@ def load_ov_model_from_pytorch(model, inputs=None):
         elif model.main_input_name == "input_values":
             inputs = torch.zeros((1, 16000), dtype=torch.float32)
         else:
-            inputs = tuple(
-                [
-                    dummy_inputs,
-                ]
-                * len(input_names)
-            )
+            inputs = tuple([dummy_inputs] * len(input_names))
     else:
         input_names = []
         for name, tensor in inputs.items():
@@ -520,7 +515,7 @@ class OVPreTrainedModel(GenerationMixin):
             self._load_network()
 
         self.save_pretrained("/tmp/optimum/")
-        
+
         model_configuration = {"name": "model", "base_path": "/opt/model"}
 
         config = {}
